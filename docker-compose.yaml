@@ -1,0 +1,16 @@
+services:
+    camera:
+        image: openhorizon/mjpg-streamer-pi3
+        command: [ "./mjpg_streamer", "-o", "output_http.so -w ./www", "-i", "input_raspicam.so -fps 15" ]
+        devices:
+            - "/dev/video0:/dev/video0"
+            - "/dev/vchiq:/dev/vchiq"
+        ports:
+            - "80:8080"
+        restart: unless-stopped
+
+    gettemp:
+        build: ./gettemp
+        command: [ "python", "-u", "./temp.py"]
+        env_file: ./gettemp/secrets
+        restart: unless-stopped
